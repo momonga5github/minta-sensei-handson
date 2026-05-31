@@ -28,6 +28,7 @@ export default function Home() {
   const [history, setHistory] = useState<QaLog[]>([]);
   const [supabaseConfigured, setSupabaseConfigured] = useState(false);
   const [error, setError] = useState("");
+  const [imgError, setImgError] = useState(false);
 
   // 履歴の取得
   const fetchHistory = async () => {
@@ -81,18 +82,27 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white text-gray-800 font-sans pb-16">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white text-gray-800 font-sans pb-16">
       {/* ヘッダー */}
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-10 border-b border-rose-100 px-6 py-4 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-10 border-b border-purple-100 px-6 py-4 shadow-sm">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <span className="text-3xl">👩‍🏫</span>
-            <h1 className="text-xl font-bold tracking-tight text-rose-600">教えて、minta先生</h1>
+            {!imgError ? (
+              <img
+                src="/minta.png"
+                alt="minta先生"
+                className="w-10 h-10 rounded-full object-cover border-2 border-purple-200 shadow-sm"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <span className="text-3xl">👩‍🏫</span>
+            )}
+            <h1 className="text-xl font-bold tracking-tight text-purple-700">教えて、minta先生</h1>
           </div>
           <div className="flex items-center space-x-2">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
               supabaseConfigured 
-                ? "bg-green-100 text-green-800" 
+                ? "bg-emerald-100 text-emerald-800" 
                 : "bg-amber-100 text-amber-800"
             }`}>
               {supabaseConfigured ? "● Supabase 接続中" : "● Supabase 未設定"}
@@ -103,17 +113,17 @@ export default function Home() {
 
       <main className="max-w-3xl mx-auto px-4 mt-8 space-y-8">
         {/* 説明カード */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm border border-rose-100/50">
+        <section className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100/50">
           <h2 className="text-lg font-bold text-gray-900 mb-2">授業デモ用アプリ 🚀</h2>
           <p className="text-sm text-gray-600 leading-relaxed">
             minta先生に何でも質問してください。AIが回答を生成し、同時に
-            <strong className="text-rose-600">個人情報（PII）を除去した分析メタデータ</strong>だけをデータベース（Supabase）に蓄積します。
+            <strong className="text-purple-600 font-semibold">個人情報（PII）を除去した分析メタデータ</strong>だけをデータベース（Supabase）に蓄積します。
             元の質問文や回答文は一切DBに保存されないため、プライバシーを守りながら質問傾向を分析できます。
           </p>
         </section>
 
         {/* 質問入力エリア */}
-        <section className="bg-white rounded-2xl p-6 shadow-md border border-rose-100">
+        <section className="bg-white rounded-2xl p-6 shadow-md border border-purple-100">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="question" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -122,7 +132,7 @@ export default function Home() {
               <textarea
                 id="question"
                 rows={4}
-                className="w-full rounded-xl border border-gray-200 p-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition"
+                className="w-full rounded-xl border border-gray-200 p-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                 placeholder="例: プロンプトエンジニアリングってなんですか？ / 千葉工業大学に通っている田中です。"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
@@ -132,7 +142,7 @@ export default function Home() {
             <button
               type="submit"
               disabled={loading || !question.trim()}
-              className="w-full bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-95 flex items-center justify-center space-x-2"
+              className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-95 flex items-center justify-center space-x-2"
             >
               {loading ? (
                 <>
@@ -163,12 +173,21 @@ export default function Home() {
           <section className="space-y-4 animate-fade-in">
             {/* AIの回答 */}
             {answer && (
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-rose-100">
-                <div className="flex items-center space-x-2 mb-4">
-                  <span className="text-2xl">👩‍🏫</span>
-                  <h3 className="font-bold text-lg text-rose-600">minta先生の回答</h3>
+              <div className="bg-white rounded-2xl p-6 shadow-md border border-purple-100">
+                <div className="flex items-center space-x-3 mb-4">
+                  {!imgError ? (
+                    <img
+                      src="/minta.png"
+                      alt="minta先生"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-purple-200 shadow-sm"
+                      onError={() => setImgError(true)}
+                    />
+                  ) : (
+                    <span className="text-3xl">👩‍🏫</span>
+                  )}
+                  <h3 className="font-bold text-lg text-purple-700">minta先生の回答</h3>
                 </div>
-                <div className="prose max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap">
+                <div className="prose max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap pl-1">
                   {answer}
                 </div>
               </div>
@@ -189,7 +208,7 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <span className="text-gray-500 block mb-1">分類カテゴリ</span>
-                        <span className="bg-slate-100 text-slate-800 px-2 py-1 rounded font-semibold text-xs inline-block">
+                        <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded font-semibold text-xs inline-block">
                           {analysis.category}
                         </span>
                       </div>
@@ -198,7 +217,7 @@ export default function Home() {
                         <span className={`px-2 py-1 rounded font-semibold text-xs inline-block ${
                           analysis.contains_pii 
                             ? "bg-red-100 text-red-800" 
-                            : "bg-green-100 text-green-800"
+                            : "bg-emerald-100 text-emerald-800"
                         }`}>
                           {analysis.contains_pii ? "検出 (伏字化されました)" : "未検出"}
                         </span>
@@ -229,7 +248,7 @@ export default function Home() {
         )}
 
         {/* 履歴エリア */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm border border-rose-100/50">
+        <section className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100/50">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-lg text-gray-900 flex items-center space-x-2">
               <span>📊</span>
@@ -237,7 +256,7 @@ export default function Home() {
             </h3>
             <button 
               onClick={fetchHistory}
-              className="text-xs text-rose-500 hover:text-rose-600 hover:underline"
+              className="text-xs text-purple-500 hover:text-purple-600 hover:underline font-semibold"
             >
               更新する 🔄
             </button>
@@ -257,16 +276,16 @@ export default function Home() {
           ) : (
             <div className="space-y-4">
               {history.map((log) => (
-                <div key={log.id} className="border border-gray-100 rounded-xl p-4 hover:bg-rose-50/20 transition">
+                <div key={log.id} className="border border-gray-100 rounded-xl p-4 hover:bg-purple-50/20 transition">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2 text-xs">
                     <div className="flex items-center space-x-2">
-                      <span className="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-medium">
+                      <span className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full font-semibold">
                         {log.category}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full font-medium ${
+                      <span className={`px-2 py-0.5 rounded-full font-semibold ${
                         log.contains_pii 
                           ? "bg-red-50 text-red-600" 
-                          : "bg-green-50 text-green-600"
+                          : "bg-emerald-50 text-emerald-600"
                       }`}>
                         {log.contains_pii ? "PIIあり" : "PIIなし"}
                       </span>
