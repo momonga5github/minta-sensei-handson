@@ -16,7 +16,7 @@ export async function generateText(prompt: string, systemInstruction?: string): 
       // @google/generative-ai の方式で systemInstruction を渡すには、生成時に設定するか、
       // あるいは getGenerativeModel の systemInstruction パラメータを利用します。
       const modelWithSystem = systemInstruction 
-        ? ai.getGenerativeModel({ model: "gemini-2.5-flash", systemInstruction: { parts: [{ text: systemInstruction }] } })
+        ? ai.getGenerativeModel({ model: "gemini-2.5-flash", systemInstruction: systemInstruction })
         : model;
 
       const result = await modelWithSystem.generateContent({
@@ -62,7 +62,7 @@ export async function generateJSON<T>(prompt: string, systemInstruction?: string
       const modelWithSystem = systemInstruction 
         ? ai.getGenerativeModel({ 
             model: "gemini-2.5-flash", 
-            systemInstruction: { parts: [{ text: systemInstruction }] },
+            systemInstruction: systemInstruction,
             generationConfig: { responseMimeType: "application/json" }
           })
         : model;
